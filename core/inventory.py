@@ -10,3 +10,9 @@ class Inventory(Unit):
             self.inventario.append(carta)
             return True
         return False
+
+    def contar_itens(lista):
+        inventario = {}
+        for item in lista:
+            inventario[item] = inventario.get(item, 0) + 1
+        return inventario
