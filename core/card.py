@@ -17,7 +17,7 @@ class Card:
         self.pv = pv
         self.dano = dano
 
-        self.inventario = {}
+        self.inventario = []
         self.partes = []
 
     def esta_ativo(self):
