@@ -8,7 +8,8 @@ class Card:
         aparencia="",
         descricao="",
         pv=0,
-        dano=0
+        dano=0,
+        acoes=None
     ):
         self.nome = nome
         self.tipo = tipo
@@ -19,11 +20,6 @@ class Card:
         self.pv = pv
         self.dano = dano
 
+        self.acoes = acoes or []
         self.inventario = []
         self.partes = []
-
-    def esta_ativo(self):
-        return self.pv > 0
-
-    def receber_dano(self, valor):
-        self.pv -= valor
