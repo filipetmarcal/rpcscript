@@ -1,11 +1,13 @@
 class Action:
-    def __init__(self, nome, condicao, efeito):
+    def __init__(
+        self,
+        nome,
+        condicao,
+        efeito,
+        *,
+        custo_tempo=None
+    ):
         self.nome = nome
         self.condicao = condicao
         self.efeito = efeito
-
-    def pode_executar(self, contexto):
-        return self.condicao(contexto)
-
-    def executar(self, contexto):
-        self.efeito(contexto)
+        self.custo_tempo = custo_tempo or {}
