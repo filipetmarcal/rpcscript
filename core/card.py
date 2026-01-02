@@ -4,6 +4,7 @@ class Card:
         nome,
         tipo,
         custo=0,
+        fome=0,
         aparencia="",
         descricao="",
         pv=0,
@@ -12,6 +13,7 @@ class Card:
         self.nome = nome
         self.tipo = tipo
         self.custo = custo
+        self.fome = fome
         self.aparencia = aparencia
         self.descricao = descricao
         self.pv = pv
