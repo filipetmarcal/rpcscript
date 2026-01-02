@@ -32,6 +32,13 @@ class Inventory(Unit):
             contagem[item] = contagem.get(item, 0) + 1
         return contagem
 
+    def contar_por_tipo(self):
+        resultado = {}
+        for item in self.inventario:
+            tipo = item.tipo
+            resultado[tipo] = resultado.get(tipo, 0) + 1
+        return resultado
+
     def esta_cheio(self):
         if self.limite is None:
             return False
