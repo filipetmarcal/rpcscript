@@ -1,12 +1,8 @@
 class Calendario:
     def __init__(
         self,
-        ano=1,
-        mes=1,
-        dia=1,
-        hora=0,
-        minuto=0,
-        segundo=0,
+        ano=1, mes=1, dia=1,
+        hora=0, minuto=0, segundo=0,
         *,
         segundos_por_minuto=60,
         minutos_por_hora=60,
@@ -15,7 +11,6 @@ class Calendario:
         meses_por_ano=12,
         periodos=None
     ):
-        # Data e hora atual
         self.ano = ano
         self.mes = mes
         self.dia = dia
@@ -23,59 +18,63 @@ class Calendario:
         self.minuto = minuto
         self.segundo = segundo
 
-        # Configuração do tempo (customizável)
         self.segundos_por_minuto = segundos_por_minuto
         self.minutos_por_hora = minutos_por_hora
         self.horas_por_dia = horas_por_dia
         self.dias_por_mes = dias_por_mes
         self.meses_por_ano = meses_por_ano
 
-        # Períodos do dia (opcional)
         self.periodos = periodos or {
             "madrugada": range(0, 5),
-            "manha": range(5, 10),
-            "tarde": range(10, 15),
-            "fim_de_tarde": range(15, 19),
-            "noite": range(19, self.horas_por_dia)
+            "manha": range(5, 12),
+            "tarde": range(12, 18),
+            "noite": range(18, self.horas_por_dia)
         }
 
-def avancar_segundos(self, segundos):
-    self.segundo += segundos
+    def avancar_segundos(self, segundos):
+        """Calcula o avanço do tempo usando divisões inteiras (mais eficiente)."""
+        self.segundo += segundos
 
-    while self.segundo >= self.segundos_por_minuto:
-        self.segundo -= self.segundos_por_minuto
-        self.minuto += 1
+        # Uso de // (divisão inteira) e % (resto) evita loops longos
+        if self.segundo >= self.segundos_por_minuto:
+            minutos_extras = self.segundo // self.segundos_por_minuto
+            self.segundo %= self.segundos_por_minuto
+            self.minuto += minutos_extras
 
-    while self.minuto >= self.minutos_por_hora:
-        self.minuto -= self.minutos_por_hora
-        self.hora += 1
+        if self.minuto >= self.minutos_por_hora:
+            horas_extras = self.minuto // self.minutos_por_hora
+            self.minuto %= self.minutos_por_hora
+            self.hora += horas_extras
 
-    while self.hora >= self.horas_por_dia:
-        self.hora -= self.horas_por_dia
-        self.dia += 1
+        if self.hora >= self.horas_por_dia:
+            dias_extras = self.hora // self.horas_por_dia
+            self.hora %= self.horas_por_dia
+            self.dia += dias_extras
 
-    while self.dia > self.dias_por_mes:
-        self.dia = 1
-        self.mes += 1
+        # Ajuste de meses e anos (dias começam em 1)
+        while self.dia > self.dias_por_mes:
+            self.dia -= self.dias_por_mes
+            self.mes += 1
 
-    while self.mes > self.meses_por_ano:
-        self.mes = 1
-        self.ano += 1
+        while self.mes > self.meses_por_ano:
+            self.mes -= self.meses_por_ano
+            self.ano += 1
 
-def consumir_tempo(
-    self,
-    *,
-    segundos=0,
-    minutos=0,
-    horas=0,
-    dias=0
-):
-    total_segundos = (
-        segundos
-        + minutos * self.segundos_por_minuto
-        + horas * self.minutos_por_hora * self.segundos_por_minuto
-        + dias * self.horas_por_dia * self.minutos_por_hora * self.segundos_por_minuto
-    )
+    def consumir_tempo(self, segundos=0, minutos=0, horas=0, dias=0):
+        total_segundos = (
+            segundos
+            + (minutos * self.segundos_por_minuto)
+            + (horas * self.minutos_por_hora * self.segundos_por_minuto)
+            + (dias * self.horas_por_dia * self.minutos_por_hora * self.segundos_por_minuto)
+        )
+        self.avancar_segundos(total_segundos)
 
-    self.avancar_segundos(total_segundos)
+    def obter_periodo_atual(self):
+        """Retorna o nome do período baseado na hora atual."""
+        for nome, intervalo in self.periodos.items():
+            if self.hora in intervalo:
+                return nome
+        return "Desconhecido"
 
+    def __str__(self):
+        return f"Data: {self.dia:02d}/{self.mes:02d}/{self.ano:04d} | Hora: {self.hora:02d}:{self.minuto:02d}:{self.segundo:02d} ({self.obter_periodo_atual()})"
